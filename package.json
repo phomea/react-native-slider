@@ -1,6 +1,6 @@
 {
   "name": "@phomea/react-native-slider",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A react native slider",
   "main": "index.js",
   "scripts": {

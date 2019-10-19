@@ -1,15 +1,32 @@
 import React from 'react';
-import {
-  View,
-  PanResponder,
-  Text,
-  Animated,
-  Easing,
-  ViewPropTypes,
-} from 'react-native';
+import {View, Text, Animated, Easing} from 'react-native';
 import {colors} from './style';
 import BasicSlider from './BasicSlider';
 import PropTypes from 'prop-types';
+
+const sliderContainerStyle = {
+  justifyContent: 'center',
+};
+
+const stepLabelStyle = {
+  position: 'absolute',
+  //top: 80,
+  top: -20,
+  left: -20,
+  width: 50,
+  textAlign: 'center',
+  fontSize: 12,
+  lineHeight: 14,
+  fontWeight: 'bold',
+  color: colors.grey1,
+};
+const stepStyle = {
+  position: 'absolute',
+  height: 10,
+  width: 4,
+  marginLeft: 8,
+  backgroundColor: '#ccc',
+};
 
 class StepSlider extends BasicSlider {
   shouldRecalculateValue() {
@@ -42,13 +59,17 @@ class StepSlider extends BasicSlider {
         }
       });
 
-      if (currentValue != value) {
+      if (currentValue !== value) {
         Animated.timing(this.animatedX, {
           toValue: animateTo,
           duration: 150,
           easing: Easing.elastic(1.2),
           useNativeDriver: true,
-        }).start();
+        }).start(() => {
+          this.setState({
+            x: animateTo,
+          });
+        });
         value = currentValue;
         this.setState({
           value: currentValue,
@@ -68,9 +89,7 @@ class StepSlider extends BasicSlider {
 
   renderSlider() {
     return (
-      <View style={{
-          justifyContent:"center"
-      }}>
+      <View style={sliderContainerStyle}>
         {super.renderSlider()}
         {this.props.steps.map(s => {
           return (
@@ -78,37 +97,11 @@ class StepSlider extends BasicSlider {
               key={s.value}
               pointerEvents="none"
               style={{
-                position: 'absolute',
+                ...stepStyle,
                 left:
                   this.state.maxValuePosition * (s.value / this.state.maxValue),
-                height: 40,
-                width: 4,
-                marginLeft: 13,
-                backgroundColor: '#ccc',
               }}>
-              <Text
-                style={{
-                  position: 'absolute',
-                  top: 80,
-                  left: 0,
-                  height: 30,
-                  width: 50,
-                  marginLeft: -23,
-                  textAlign: 'center',
-                  fontSize: 10,
-                  lineHeight: 10,
-                  fontWeight: 'bold',
-                  textAlignVertical: 'bottom',
-                  color: colors.grey1,
-
-                  transform: [
-                    {
-                      translateY: -30,
-                    },
-                  ],
-                }}>
-                {s.label}
-              </Text>
+              <Text style={stepLabelStyle}>{s.label}</Text>
             </View>
           );
         })}
@@ -116,7 +109,7 @@ class StepSlider extends BasicSlider {
     );
   }
 }
-/*
+
 StepSlider.propTypes = {
   ...BasicSlider.propTypes,
   steps: PropTypes.arrayOf(
@@ -125,19 +118,9 @@ StepSlider.propTypes = {
       label: PropTypes.string,
     }),
   ),
-};*/
+};
 StepSlider.defaultProps = {
-  //...BasicSlider.propTypes,
-  handlerStyle: {
-    width: 30,
-    height: 30,
-    backgroundColor: '#ccc',
-    borderRadius: 30,
-  },
-  sliderStyle: {},
-  intValue: true,
-  onChangeValue: v => {},
-  onSeek: v => {},
+  ...BasicSlider.defaultProps,
   steps: [],
 };
 
