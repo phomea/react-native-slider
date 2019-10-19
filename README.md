@@ -9,10 +9,15 @@ A pure JS slider for react-native, version 0.0.1
   npm install @phomea/react-native-slider
   
 ## Usage
-    import {CustomSlider} from '@phomea/react-native-slider';
+    import {BasicSlider} from '@phomea/react-native-slider';
  
-    <CustomSlider onChangeValue={this.onChangeValue} onSeek={this.onSeek} />
+    <BasicSlider onChangeValue={this.onChangeValue} onSeek={this.onSeek} />
 
+
+
+    import {StepSlider} from '@phomea/react-native-slider';
+ 
+    <StepSlider onChangeValue={this.onChangeValue} />
 ## Props
 
 ### onChangeValue : function(value)
