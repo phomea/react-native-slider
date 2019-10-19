@@ -2,9 +2,7 @@
 
 A pure JS slider for react-native, version 0.0.1
 
-![example1](assets/examples.jpg)
-![example2](assets/examples2.jpg)
-
+![example1](assets/example.gif)
 ## Install
   npm install @phomea/react-native-slider
   
