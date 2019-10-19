@@ -1,5 +1,6 @@
-import CustomSlider from "./src/CustomSlider"
-
+import BasicSlider from './src/BasicSlider';
+import StepSlider from './src/StepSlider';
 export {
-    CustomSlider
+    BasicSlider,
+    StepSlider
 }
