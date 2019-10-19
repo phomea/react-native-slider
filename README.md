@@ -35,7 +35,15 @@ Steps need to have this structure
       value : number (required)
       label : string (optional)
     }
-    
+
+ ### theme : string
+ Define the theme to use for your slider. Accepted values : 
+ - standard
+ - big
+ - square
+ - stick
+ 
+
  ## Conclusion
  Feel free to clone the repo and make pull request or open new issues.
  
