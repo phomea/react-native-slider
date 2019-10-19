@@ -3,6 +3,8 @@ import {View, PanResponder, Animated, ViewPropTypes} from 'react-native';
 import PropTypes from 'prop-types';
 import themes from './themes';
 
+
+
 class BasicSlider extends React.Component {
   animatedX = new Animated.Value(0);
 
@@ -56,31 +58,40 @@ class BasicSlider extends React.Component {
 
     this.props.onChangeValue(value);
   }
+  panResponderStart(event, gesture) {
+    this.animatedX.setValue(event.nativeEvent.locationX);
+    this.setState({
+      x: event.nativeEvent.locationX,
+      originalX: event.nativeEvent.locationX,
+      value: this.calculateValue(event.nativeEvent.locationX),
+    });
+  }
+  panResponderEnd() {
+    this.shouldRecalculateValue();
+  }
+  panResponderMove(event, gesture) {
+    let x = this.state.originalX + gesture.dx;
+    x = x > 0 ? x : 0;
+    x = x <= this.state.maxValuePosition ? x : this.state.maxValuePosition;
+
+    this.animatedX.setValue(x);
+    this.setState({
+      x,
+      value: this.calculateValue(x),
+    });
+  }
   constructor(props) {
     super(props);
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderEnd: () => {
-        this.shouldRecalculateValue();
+        this.panResponderEnd();
       },
       onPanResponderStart: (event, gesture) => {
-        this.animatedX.setValue(event.nativeEvent.locationX);
-        this.setState({
-          x: event.nativeEvent.locationX,
-          originalX: event.nativeEvent.locationX,
-          value: this.calculateValue(event.nativeEvent.locationX),
-        });
+        this.panResponderStart(event, gesture);
       },
       onPanResponderMove: (event, gesture) => {
-        let x = this.state.originalX + gesture.dx;
-        x = x > 0 ? x : 0;
-        x = x <= this.state.maxValuePosition ? x : this.state.maxValuePosition;
-
-        this.animatedX.setValue(x);
-        this.setState({
-          x,
-          value: this.calculateValue(x),
-        });
+        this.panResponderMove(event, gesture);
       },
     });
   }
@@ -92,7 +103,8 @@ class BasicSlider extends React.Component {
     };
     const completeStyle = {
       ...this.completeStyle,
-      width: this.state.x,
+      marginHorizontal: this.handlerStyle.width / 2,
+      width: this.state.x ,
     };
 
     return (
